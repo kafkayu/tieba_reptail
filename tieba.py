@@ -3,6 +3,8 @@ import urllib
 import urllib.request
 import re
 import csv
+import emojiswitch
+
 class Tool:
     #替换工具
     removeImg = re.compile('<img.*?>| {7}|')
@@ -85,7 +87,7 @@ class BDTB:
         persons = []
         p = Tool()
         for item in items:
-            person= "\n" + p.replace(item) + "\n"
+            person=  p.replace(item)
             persons.append(person)
         return persons
     def getContent(self, page):
@@ -96,7 +98,7 @@ class BDTB:
         contents = []
         p = Tool()
         for item in items:
-            content = "\n"+ p.replace(item)+"\n"
+            content = p.replace(item)
             contents.append(content)
 
 
@@ -110,7 +112,7 @@ class BDTB:
         contents = []
         p = Tool()
         for item in items:
-            content = "\n"+ p.replace(item)+"\n"
+            content =  p.replace(item)
             contents.append(content)
         return contents
 
@@ -145,22 +147,30 @@ class BDTB:
             self.floor += 1
     def writeData2CSV(self,tiebaName,title ,PersonName,contents,contentTime):
         # 数据按列存储为list
-        tiebaName = [tiebaName]*len(PersonName)
-        title = [title] * len(PersonName)
+        tiebaName = [tiebaName for i in range(len(PersonName)) ]
+        title = [title for i in range(len(PersonName)) ]
         rawData = [tiebaName,title,PersonName,contents,contentTime]
         wData = list(zip(*rawData))
+        encodeData = []
+
+        for i in wData:
+            tmp = []
+            for j in i :
+                tmp.append(emojiswitch.demojize(j,delimiters=("_","_"),lang="zh"))
+            encodeData.append(tmp)
 
         data = [['贴吧名', '帖子标题', 'ID','内容', '发布时间']]
-        data.append(wData)
+        for i in wData:
+            data.append(i)
 
 
 
         # 创建并打开CSV文件
-        with open('data.csv', 'a', newline='',encoding='utf-8') as file:
+        with open('data.csv', 'w', newline='',encoding='utf-8-sig') as file:
             writer = csv.writer(file)
 
             # 写入数据行
-            writer.writerows(data)
+            writer.writerows(encodeData)
     def start(self):
         indexPage = self.getpage(1)
         pageNum = self.getPageNum(indexPage)
@@ -193,7 +203,6 @@ seeLZ = 0#input("是否只看楼主，是请输入1\n")
 floorTag = 1#input("是否写入楼层信息，是输入1\n")
 bdtb = BDTB(baseURL,seeLZ,floorTag)
 bdtb.start()
-
 
 
 
