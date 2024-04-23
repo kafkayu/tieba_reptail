@@ -152,19 +152,14 @@ class BDTB:
         rawData = [tiebaName,title,PersonName,contents,contentTime]
         wData = list(zip(*rawData))
         encodeData = []
-
+        data = [['贴吧名', '帖子标题', 'ID','内容', '发布时间']]
         for i in wData:
+            data.append(i)
+        for i in data:
             tmp = []
             for j in i :
                 tmp.append(emojiswitch.demojize(j,delimiters=("_","_"),lang="zh"))
             encodeData.append(tmp)
-
-        data = [['贴吧名', '帖子标题', 'ID','内容', '发布时间']]
-        for i in wData:
-            data.append(i)
-
-
-
         # 创建并打开CSV文件
         with open('data.csv', 'w', newline='',encoding='utf-8-sig') as file:
             writer = csv.writer(file)
