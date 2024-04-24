@@ -35,18 +35,25 @@ def getIndexPage(page):
             contents.append(content)
         return contents
 def main():
+    startnum = 1
+    num = 3 #input the num of pages
+    keyword = "离婚冷静期"
 
-    num = 10 #input the num of pages
-    base_url = "https://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C0%EB%BB%E9%C0%E4%BE%B2%C6%DA&un=&rn=10&pn=0&sd=&ed=&sm=1&only_thread=1" #input the URL contained with post pages URL
+    base_url = "https://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C0%EB%BB%E9%C0%E4%BE%B2%C6%DA&rn=10&un=&only_thread=1&sm=1&sd=&ed=&pn="
     rootPath = "../src/"
-    htmlPath = rootPath+ "HtmlList"
-    PURLPath = rootPath+ "PostURLList"
-    for pn in range(int(num)):
+    htmlPath = rootPath+ "HtmlList/"
+    PURLPath = rootPath+ "PostURLList/"
+
+    for pn in range(startnum,int(num)):
+        base_url+=str(pn)
         args = {
-            "pn":pn*50,
-            "kw":'ok'
+            "pn":pn,#*50
+            "kw":keyword,
+            "only_thread":1,
+            "isnew" :1,
+            "qw":keyword,
         }
-        filename = "page_" + str(pn+1)+".html"
+        filename = "page_" + str(pn)+".html"
         args = urlencode(args)
         print("Downloading... "+filename)
         html_bytes = get_html(base_url.format(args))
