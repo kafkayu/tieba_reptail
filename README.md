@@ -1,5 +1,3 @@
-[TOC]
-
 # introdution
 这是根据某个搜索词，爬取百度贴吧所有相关帖子及用户的评论详情的demo
 
@@ -53,4 +51,8 @@ python tieba.py ####获得所有帖子内容
 '''
 
 # acknoledgement
+<<<<<<< HEAD
 部分代码来自于[linyha](https://github.com/linyha/tieba) , 构建IP池部分来自[博客](https://www.cnblogs.com/TurboWay/p/8172246.html), 感谢新传学院相关学长和老师需求建议
+=======
+部分代码来自于[linyha](https://github.com/linyha/tieba) , 构建IP池部分来自博客(https://www.cnblogs.com/TurboWay/p/8172246.html),感谢新传学院相关学长和老师需求建议
+>>>>>>> 056ba8150e789b4a321cc68e5a0672b7bfa3cd28

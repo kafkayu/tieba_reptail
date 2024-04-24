@@ -4,7 +4,20 @@ import re
 import csv
 import emojiswitch
 import json
+import random
+def getRandomIP():
+    pool = ['114.231.42.226:8089',
+            # '114.231.42.226:8089',
+            # '117.69.237.252:8089',
+            # '117.69.232.202:8089'
+            ]
 
+    ipport = random.choice(pool)
+    proxies = {
+        # 'http': 'http://{}'.format(ipport) ,
+        'https': 'https://{}'.format(ipport)
+    }
+    #return proxies
 def read_config():
     with open('../src/config/config.json', 'r') as f:
         json_str = f.read()
@@ -59,9 +72,16 @@ class BDTB:
     def getpage(self, pageNum):
         #获取贴吧页面
         try:
+            proxy = getRandomIP()
+            httpproxy_handler = urllib.request.ProxyHandler(proxy)
+            opener = urllib.request.build_opener(httpproxy_handler)
+
+            # urlopen()获取页面，类型是字节，需要用decode()解码，转换成str类型
+
             url = self.baseURL + self.seeLZ + '&pn=' + str(pageNum)
             request = urllib.request.Request(url)
-            response = urllib.request.urlopen(request)
+            response = opener.open(request)
+            # response = urllib.request.urlopen(request)
             #print response.read()
 
             return response.read()
@@ -74,16 +94,21 @@ class BDTB:
 
         pattern = re.compile('<a class="card_title_fname.*?>(.*?)</a>', re.S)
         result = re.search(pattern, page.decode('utf-8'))
+
         if result:
             return result.group(1).strip()
         else:
+            pattern = re.compile('<a class ="j_plat_picbox plat_picbox".*?alt="(.*?)"',re.S)
+            result = re.search(pattern, page.decode('utf-8'))
+            if result:
+                return result.group(1).strip()
             return None
 
 
     def getTitle(self, page):
         #获取标题
         #page = self.getpage()
-        pattern = re.compile('<h3 class="core_title_txt.*?>(.*?)</h3>', re.S)
+        pattern = re.compile('<h\d class="core_title_txt.*?>(.*?)</h\d>', re.S)
         result = re.search(pattern, page.decode('utf-8'))
         if result:
             return result.group(1).strip()
@@ -191,8 +216,9 @@ class BDTB:
         if pageNum == None:
             print ("URL无效，请重试")
             return
-        try:
-            print (u"该帖子共有" + str(pageNum) + u"页")
+        #try:
+        if  tiebaName :
+            print (u"该帖子共有" + str(pageNum) + u"页" +"贴吧名："+tiebaName+"标题为："+ title)
             for i in range(1, int(pageNum)+1):
                 print ("正在写入第" + str(i) + "页数据")
                 page = self.getpage(i)
@@ -200,10 +226,11 @@ class BDTB:
                 contentTime = self.getContentTime(page)
                 contents = self.getContent(page)
                 self.writeData2CSV(tiebaName ,title,PersonName,contents,contentTime)
-        except IOError as  e:
-            print ("写入异常，原因"+ e.message)
-        finally:
-            print ("写入任务完成")
+        else:
+            print("帖子读取错误，请记录错误序号")
+            return False
+        # except IOError as  e:
+        #     print ("写入异常，原因"+ e.message)
+        # finally:
+        #     print ("写入任务完成")
 
-    def initilize(self,url):
-        AllPage = self.getpage(1)

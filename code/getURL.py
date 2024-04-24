@@ -5,20 +5,33 @@ from fake_useragent import UserAgent
 from ToolFunction import Tool
 from ToolFunction import save_list_to_txt ,load_list_from_txt
 import re
+import urllib
 import json
 from ToolFunction import read_config,save_config
 
 
-
+def getRandomIP():
+    ip ='114.231.42.226'
+    port = '8089'
+    proxies = {
+        'http': 'http://{}:{}'.format(ip,port) ,
+        'https': 'http://{}:{}'.format(ip,port)
+    }
 def get_html(url):
     # 随机获取一个动态ua
     headers = {
         "User-Agent": UserAgent().random
     }
     # 发起请求
+
+    ###
+
+    proxy = getRandomIP()
+    httpproxy_handler = urllib.request.ProxyHandler(proxy)
+    opener = urllib.request.build_opener(httpproxy_handler)
     request = Request(url, headers=headers)
     # urlopen()获取页面，类型是字节，需要用decode()解码，转换成str类型
-    respose = urlopen(request)
+    respose = opener(request)
     return respose.read()
 
 def save_html(filename,html_bytes):
