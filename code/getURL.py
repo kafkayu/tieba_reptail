@@ -5,6 +5,8 @@ from fake_useragent import UserAgent
 from ToolFunction import Tool
 from ToolFunction import save_list_to_txt ,load_list_from_txt
 import re
+import json
+from ToolFunction import read_config,save_config
 
 
 
@@ -34,24 +36,30 @@ def getIndexPage(page):
             content = p.replace(item)
             contents.append(content)
         return contents
-def main():
-    startnum = 1
-    num = 3 #input the num of pages
-    keyword = "离婚冷静期"
 
-    base_url = "https://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C0%EB%BB%E9%C0%E4%BE%B2%C6%DA&rn=10&un=&only_thread=1&sm=1&sd=&ed=&pn="
+def main():
+
+
+    base_path = "https://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C0%EB%BB%E9%C0%E4%BE%B2%C6%DA&rn=10&un=&only_thread=1&sm=1&sd=&ed=&pn="
     rootPath = "../src/"
     htmlPath = rootPath+ "HtmlList/"
     PURLPath = rootPath+ "PostURLList/"
 
-    for pn in range(startnum,int(num)):
-        base_url+=str(pn)
+    # get config information
+    config = read_config()
+
+    startnum = config['startnum']
+    totalnum = config["totalnum"]
+
+
+    for pn in range(startnum,int(totalnum)):
+        base_url=base_path+str(pn)
         args = {
-            "pn":pn,#*50
-            "kw":keyword,
-            "only_thread":1,
-            "isnew" :1,
-            "qw":keyword,
+            # "pn":pn,#*50
+            # "kw":keyword,
+            # "only_thread":1,
+            # "isnew" :1,
+            # "qw":keyword,
         }
         filename = "page_" + str(pn)+".html"
         args = urlencode(args)
@@ -59,7 +67,14 @@ def main():
         html_bytes = get_html(base_url.format(args))
         IndexPage = getIndexPage(html_bytes )
         save_list_to_txt(IndexPage, PURLPath+'list_data.txt')
+        #####################save config information
+        config['startnum'] = pn + 1
+        save_config(config)
+        #####################
         save_html(htmlPath+filename,html_bytes)
+        ####save startnum
+
+
 
 if __name__ == '__main__':
     main()

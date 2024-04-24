@@ -3,6 +3,20 @@ import urllib.request
 import re
 import csv
 import emojiswitch
+import json
+
+def read_config():
+    with open('../src/config/config.json', 'r') as f:
+        json_str = f.read()
+        data = json.loads(json_str)
+    # 打印读取到的字典
+    return data
+def save_config(config):
+    # 将json字符串保存到文件
+    # 将字典转换为json字符串
+    config = json.dumps(config)
+    with open('../src/config/config.json', 'w') as f:
+        f.write(config)
 def save_list_to_txt(data, filename):
     with open(filename, 'a') as file:
         for item in data:
@@ -32,7 +46,7 @@ class Tool:
         return x.strip()
 class BDTB:
 
-    def __init__(self, baseUrl, seeLZ, floorTag):
+    def __init__(self, baseUrl, seeLZ, floorTag,needTitle):
         #初始化输入
         self.baseURL = baseUrl
         self.seeLZ = '?see_lz='+str(seeLZ)
@@ -41,7 +55,7 @@ class BDTB:
         self.floor = 1
         self.defaultTitle = u"百度贴吧"
         self.floorTag = floorTag
-
+        self.needTitle = needTitle
     def getpage(self, pageNum):
         #获取贴吧页面
         try:
@@ -160,7 +174,8 @@ class BDTB:
 
             # write data
             writer.writerows(encodeData)
-
+        if self.needTitle == 0:
+            encodeData = encodeData[1:]
         with open('../src/TotalPost/data.csv', 'a', newline='', encoding='utf-8-sig') as file:
             writer = csv.writer(file)
 
@@ -172,7 +187,7 @@ class BDTB:
         tiebaName = self.getFname(indexPage)
 
         title = self.getTitle(indexPage)
-        self.setFileTitle(title)
+        #self.setFileTitle(title)
         if pageNum == None:
             print ("URL无效，请重试")
             return
