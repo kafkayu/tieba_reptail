@@ -1,3 +1,10 @@
+######################################
+# File: tieba.py
+# Author: Jiahong Yu
+# Created: 2024-04-24
+# Last Modified: 2024-04-24
+# Description: This is an main file which search and get post content
+######################################
 # -*- coding:utf-8 -*-
 import urllib
 import urllib.request

@@ -1,3 +1,11 @@
+######################################
+# File: getURL.py
+# Author: Jiahong Yu
+# Created: 2024-04-24
+# Last Modified: 2024-04-24
+# Description: This is an  file which search all the URLs
+######################################
+
 from urllib.request import urlopen
 from urllib.request import Request
 from urllib.parse import urlencode
