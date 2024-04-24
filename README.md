@@ -44,6 +44,9 @@ python getURL.py #####运行获得所有相关帖子URL并保存再PostURLList�
 python tieba.py ####获得所有帖子内容
 ```
 
+# Future work
+正在尝试构建IP POOL尝试绕过一些反扒机制，目前参考的github有[IP POOL](https://github.com/xiaosimao/IP_POOL)
+
 # Acknoledgement
 
 部分代码来自于[linyha](https://github.com/linyha/tieba) , 构建IP池部分来自[博客](https://www.cnblogs.com/TurboWay/p/8172246.html),感谢新传学院相关学长和老师需求建议
