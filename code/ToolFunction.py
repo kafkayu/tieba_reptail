@@ -85,16 +85,16 @@ class BDTB:
     def getpage(self, pageNum):
         #获取贴吧页面
         try:
-            proxy = getRandomIP()
-            httpproxy_handler = urllib.request.ProxyHandler(proxy)
-            opener = urllib.request.build_opener(httpproxy_handler)
+            # proxy = getRandomIP()
+            # httpproxy_handler = urllib.request.ProxyHandler(proxy)
+            # opener = urllib.request.build_opener(httpproxy_handler)
 
             # urlopen()获取页面，类型是字节，需要用decode()解码，转换成str类型
 
             url = self.baseURL + self.seeLZ + '&pn=' + str(pageNum)
             request = urllib.request.Request(url)
-            response = opener.open(request)
-            #response = urllib.request.urlopen(request)
+            # response = opener.open(request)
+            response = urllib.request.urlopen(request)
             #print response.read()
 
             return response.read()
@@ -225,13 +225,15 @@ class BDTB:
         pageNum = self.getPageNum(indexPage)
         tiebaName = self.getFname(indexPage)
 
-        title = filter_non_chinese(self.getTitle(indexPage))
+        title = self.getTitle(indexPage)
         #self.setFileTitle(title)
         if pageNum == None:
             print ("URL无效，请重试")
             return False
         #try:
+
         if  tiebaName :
+            title =filter_non_chinese(title)
             print (u"该帖子共有" + str(pageNum) + u"页" +"贴吧名："+tiebaName+"标题为："+ title)
             for i in range(1, int(pageNum)+1):
                 #time.sleep(1)
