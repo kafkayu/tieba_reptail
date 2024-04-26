@@ -12,8 +12,14 @@ import csv
 import emojiswitch
 import json
 import random
+import time
+def filter_non_chinese(text):
+    pattern = re.compile(r'[^\u4e00-\u9fa5]')  # 匹配非中文字符的正则表达式
+    filtered_text = re.sub(pattern, '', text)  # 替换非中文字符为空字符串
+    return filtered_text
 def getRandomIP():
-    pool = ['114.231.42.226:8089',
+    pool = ['60.204.145.212:8888',
+            '223.113.80.158:9091'
             # '114.231.42.226:8089',
             # '117.69.237.252:8089',
             # '117.69.232.202:8089'
@@ -88,7 +94,7 @@ class BDTB:
             url = self.baseURL + self.seeLZ + '&pn=' + str(pageNum)
             request = urllib.request.Request(url)
             response = opener.open(request)
-            # response = urllib.request.urlopen(request)
+            #response = urllib.request.urlopen(request)
             #print response.read()
 
             return response.read()
@@ -201,7 +207,7 @@ class BDTB:
                 tmp.append(emojiswitch.demojize(j,delimiters=("_","_"),lang="zh"))
             encodeData.append(tmp)
         # create and open CSV file
-        with open('../src/SinglePost/'+ tiebaName+ '_'+title+'.csv', 'w', newline='', encoding='utf-8-sig') as file:
+        with open('../src/SinglePost/'+ tiebaName+ '_'+title[:-1]+'.csv', 'w', newline='', encoding='utf-8-sig') as file:
             writer = csv.writer(file)
 
             # write data
@@ -214,19 +220,21 @@ class BDTB:
             # write data
             writer.writerows(encodeData)
     def start(self):
+
         indexPage = self.getpage(1)
         pageNum = self.getPageNum(indexPage)
         tiebaName = self.getFname(indexPage)
 
-        title = self.getTitle(indexPage)
+        title = filter_non_chinese(self.getTitle(indexPage))
         #self.setFileTitle(title)
         if pageNum == None:
             print ("URL无效，请重试")
-            return
+            return False
         #try:
         if  tiebaName :
             print (u"该帖子共有" + str(pageNum) + u"页" +"贴吧名："+tiebaName+"标题为："+ title)
             for i in range(1, int(pageNum)+1):
+                #time.sleep(1)
                 print ("正在写入第" + str(i) + "页数据")
                 page = self.getpage(i)
                 PersonName = self.getPersonName(page)
