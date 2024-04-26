@@ -15,7 +15,8 @@ from ToolFunction import BDTB
 from ToolFunction import load_list_from_txt
 from ToolFunction import save_config,read_config,save_list_to_txt
 
-PostURLListPath = "../src/PostURLList/list_data.txt"
+#PostURLListPath = "../src/PostURLList/list_data.txt"
+PostURLListPath = "../src/PostURLList/wrongURL_data.txt"
 PostURLList = load_list_from_txt(PostURLListPath )
 needTitle = 1
 config = read_config()
