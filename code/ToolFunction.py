@@ -236,7 +236,7 @@ class BDTB:
             title =filter_non_chinese(title)
             print (u"该帖子共有" + str(pageNum) + u"页" +"贴吧名："+tiebaName+"标题为："+ title)
             for i in range(1, int(pageNum)+1):
-                #time.sleep(1)
+                time.sleep(1)
                 print ("正在写入第" + str(i) + "页数据")
                 page = self.getpage(i)
                 PersonName = self.getPersonName(page)

@@ -44,6 +44,12 @@ python getURL.py #####运行获得所有相关帖子URL并保存再PostURLList�
 python tieba.py ####获得所有帖子内容
 ```
 
+# Debug
+## 运行tieba.py时 URL错误，返回数据为None等问题
+解决方法：原因是百度贴吧对于经常访问的异常IP进行了一些过滤和验证，解决方法是更换网络，比如使用不同VPN作为代理，或者使用流量访问等。经实测，使用数据访问最为稳定，但是要考虑流量费用，使用WIFI有一定效果，但是没有流量稳定，使用VPN访问有一定效果，但是容易被当成异常IP被封。总体来说，推荐网络：数据>WIFI>VPN
+
+
+
 # Future work
 正在尝试构建IP POOL尝试绕过一些反扒机制，目前参考的github有[IP POOL](https://github.com/xiaosimao/IP_POOL)
 
