@@ -2,7 +2,7 @@
 # File: getURL.py
 # Author: Jiahong Yu
 # Created: 2024-04-24
-# Last Modified: 2024-04-24
+# Last Modified: 2024-04-26
 # Description: This is an  file which search all the URLs
 ######################################
 
@@ -39,7 +39,7 @@ def get_html(url):
     opener = urllib.request.build_opener(httpproxy_handler)
     request = Request(url, headers=headers)
     # urlopen()获取页面，类型是字节，需要用decode()解码，转换成str类型
-    respose = opener(request)
+    respose = opener.open(request)
     return respose.read()
 
 def save_html(filename,html_bytes):
@@ -61,7 +61,7 @@ def getIndexPage(page):
 def main():
 
 
-    base_path = "https://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C0%EB%BB%E9%C0%E4%BE%B2%C6%DA&rn=10&un=&only_thread=1&sm=1&sd=&ed=&pn="
+    base_path = "https://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%C0%EB%BB%E9%C0%E4%BE%B2%C6%DA&rn=10&un=&only_thread=1&sm=1&sd=&ed=&pn=21"
     rootPath = "../src/"
     htmlPath = rootPath+ "HtmlList/"
     PURLPath = rootPath+ "PostURLList/"
@@ -87,7 +87,7 @@ def main():
         print("Downloading... "+filename)
         html_bytes = get_html(base_url.format(args))
         IndexPage = getIndexPage(html_bytes )
-        save_list_to_txt(IndexPage, PURLPath+'list_data.txt')
+        save_list_to_txt(IndexPage, PURLPath+'list_data_2022.txt')
         #####################save config information
         config['startnum'] = pn + 1
         save_config(config)
